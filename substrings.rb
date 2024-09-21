@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # Only works if all dictionary words are downcase
 
 def substrings(str, dict)
   result = {}
-  dict.each do | s |
+  dict.each do |s|
     occurrences = substring_idxs(str, s).length
-    result[s] = occurrences if occurrences > 0
+    result[s] = occurrences if occurrences.positive?
   end
   result
 end
@@ -14,15 +16,13 @@ def substring_idxs(string, substring)
     []
   else
     idxs = []
-    for idx in 0..(string.length-substring.length) do
-      if string[idx..idx+substring.length-1].downcase == substring
-        idxs.push(idx)
-      end
+    (0..(string.length - substring.length)).each do |idx|
+      idxs.push(idx) if string[idx..idx + substring.length - 1].downcase == substring
     end
     idxs
   end
 end
 
-dictionary = ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"]
-p substrings("below", dictionary)
+dictionary = %w[below down go going horn how howdy it i low own part partner sit]
+p substrings('below', dictionary)
 p substrings("Howdy partner, sit down! How's it going?", dictionary)
